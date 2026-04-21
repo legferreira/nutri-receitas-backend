@@ -3,7 +3,7 @@ package com.nutrireceitas.api.controller;
 import com.nutrireceitas.api.dto.PacienteDTO;
 import com.nutrireceitas.api.dto.PacienteRequestDTO;
 import com.nutrireceitas.api.dto.RegistroPesoDTO;
-import com.nutrireceitas.api.service.PacienteService;
+import com.nutrireceitas.api.service.IPacienteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,10 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pacientes")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 public class PacienteController {
 
-    private final PacienteService pacienteService;
+    private final IPacienteService pacienteService;
 
     @GetMapping
     public ResponseEntity<List<PacienteDTO>> listarTodos() {
@@ -47,8 +46,6 @@ public class PacienteController {
         pacienteService.excluir(id);
         return ResponseEntity.noContent().build();
     }
-
-    // --- Histórico de peso ---
 
     @GetMapping("/{id}/historico-peso")
     public ResponseEntity<List<RegistroPesoDTO>> listarHistoricoPeso(@PathVariable Long id) {

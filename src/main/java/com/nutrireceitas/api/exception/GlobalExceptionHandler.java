@@ -15,31 +15,34 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", 404);
-        body.put("erro", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildError(
+                "RESOURCE_NOT_FOUND", ex.getMessage(), null
+        ));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
-        Map<String, Object> body = new HashMap<>();
-        Map<String, String> campos = new HashMap<>();
+        Map<String, String> details = new HashMap<>();
         for (FieldError err : ex.getBindingResult().getFieldErrors()) {
-            campos.put(err.getField(), err.getDefaultMessage());
+            details.put(err.getField(), err.getDefaultMessage());
         }
-        body.put("status", 400);
-        body.put("erro", "Dados inválidos");
-        body.put("campos", campos);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildError(
+                "VALIDATION_ERROR", "Dados inválidos", details
+        ));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildError(
+                "INTERNAL_ERROR", "Erro interno do servidor", ex.getMessage()
+        ));
+    }
+
+    private Map<String, Object> buildError(String code, String message, Object details) {
         Map<String, Object> body = new HashMap<>();
-        body.put("status", 500);
-        body.put("erro", "Erro interno do servidor");
-        body.put("detalhe", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+        body.put("code", code);
+        body.put("message", message);
+        body.put("details", details);
+        return body;
     }
 }

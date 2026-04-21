@@ -2,7 +2,7 @@ package com.nutrireceitas.api.controller;
 
 import com.nutrireceitas.api.dto.ReceitaDTO;
 import com.nutrireceitas.api.dto.ReceitaRequestDTO;
-import com.nutrireceitas.api.service.ReceitaService;
+import com.nutrireceitas.api.service.IReceitaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/receitas")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 public class ReceitaController {
 
-    private final ReceitaService receitaService;
+    private final IReceitaService receitaService;
 
     @GetMapping
     public ResponseEntity<List<ReceitaDTO>> listarTodas() {
