@@ -1,0 +1,9 @@
+api/target/
+api/.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+!api/mvnw
+!api/mvnw.cmd
+.idea/
+*.iml
+.DS_Store
